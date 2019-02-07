@@ -80,6 +80,10 @@ def put_review(review_id=""):
         review_json = request.get_json()
     except BadRequest:
         return jsonify(error="Not a JSON"), 400
+    if 'user_id' not in review_json:
+        return jsonify(error="Missing user_id"), 400
+    if not storage.get('User', review_json['user_id']):
+        abort(404)
     """ remove the unwanted params """
     if review_json.get('id'):
         review_json.pop('id')
