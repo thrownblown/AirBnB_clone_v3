@@ -9,7 +9,7 @@ from sqlalchemy.exc import OperationalError
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['GET'])
-def get_all_places(place_id):
+def get_all_reviews(place_id):
     """ Returns all the places in json """
     place = storage.get('Place', place_id)
     if not place:
@@ -19,7 +19,7 @@ def get_all_places(place_id):
 
 
 @app_views.route('/places/<place_id>/reviews', methods=['POST'])
-def post_place(place_id=""):
+def post_review(place_id=""):
     """ makes a new review """
     place = storage.get('Place', place_id)
     if not place:
@@ -30,8 +30,8 @@ def post_place(place_id=""):
         review_json = request.get_json()
     except BadRequest:
         return jsonify(error="Not a JSON"), 400
-    if 'name' not in review_json:
-        return jsonify(error="Missing name"), 400
+    if 'text' not in review_json:
+        return jsonify(error="Missing text"), 400
     if 'user_id' not in review_json:
         return jsonify(error="Missing user_id"), 400
     if not storage.get('User', review_json['user_id']):
@@ -46,7 +46,7 @@ def post_place(place_id=""):
 
 
 @app_views.route('/reviews/<review_id>', methods=['GET'])
-def get_one_place(review_id=""):
+def get_one_review(review_id=""):
     """ Returns specified review obj in json """
     if review_id:
         review = storage.get('review', review_id)
